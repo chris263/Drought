@@ -1,0 +1,192 @@
+---
+title: "Drought Analysis"
+author: "Chris Simoes"
+date: "5/11/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Script setup  
+Install packages, start the README.md, set the random seed  
+```{r Script setup, echo=FALSE, include=FALSE}
+ip <- installed.packages()
+packages_used <- c("sommer", "lme4", "dplyr", "workflowr", "here")
+
+ip <- installed.packages()
+for (package in packages_used){
+  if (!(package %in% ip[,"Package"])) install.packages(package)
+}#END packages_used
+
+here::i_am("analysis/droughtAnalysis.Rmd")
+
+source(here::here("code/addToREADME.R"))
+addToREADME(paste0("## ", rmarkdown::metadata$title), append=F)
+addToREADME(c(date(), ""))
+
+packages_info <- ip[packages_used, c("Package", "Version", "Built")]
+addToREADME(c("The packages used in this script are:", "Package, Version, Built"))
+apply(packages_info, 1, function(vec) addToREADME(paste(vec, collapse=" ")))
+addToREADME("")
+
+random_seed <- 13123178
+set.seed(random_seed)
+addToREADME(paste("The random seed is", random_seed))
+```
+
+## Defining Main Settings and Simulating data
+
+Reading and simulating data. 2 Locations, 14 varieties, 3 rep, 2 treatments, 3 times (days).
+
+
+
+```{r main settings, echo = FALSE}
+library(dplyr)
+varieties <- c("A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12")
+blocks <- c(1,2,3)
+treatments <- c("wattered","drought")
+locations <- c("Mafra", "Chapeco")
+days <- c(30,60,90)
+
+source(here::here("code/simulateData.R"))
+
+dataf <- simulateData(varieties, blocks,treatments,locations,days)
+data1 <- dataf%>%filter(location==UQ("Mafra"))
+hist(data1$pheno)
+
+```
+
+## Modeling with 4 different interactions
+
+### Model 1
+
+Model 1 takes treatments and varieties as fixed effect. The interaction treatments per variety is taken as random effect.
+
+```{r model1, echo = TRUE}
+library(tidyr)
+library(lme4)
+library(grid)
+library(gridBase)
+model1 <- lmer(pheno~treatments+variety+(1|variety/treatments), data=data1)
+summary(model1)
+
+#getting the random effect
+blups_m1 <- ranef(model1)$treatments
+blups_m1 <- data.frame(blups_m1)
+colnames(blups_m1)<-"blups"
+
+#Formating the data for plotting
+blup <- blups_m1%>%mutate("tratVar" = rownames(blups_m1))
+df <- data.frame(x = blup$tratVar)
+dfinal <- df %>% separate(x, c("treatments","varieties"), sep = ":")
+blup_1_final <- cbind(blup,dfinal)
+blup_1_final
+
+blup_1_final <- blup_1_final[with(blup_1_final, order(treatments,blups)),]
+
+# ## Plot, but suppress the labels
+midpts <- barplot(blup_1_final$blups, col=rainbow(20), names.arg="", beside= TRUE)
+## Use grid to add the labels
+vps <- baseViewports()
+pushViewport(vps$inner, vps$figure, vps$plot)
+
+grid.text(blup_1_final$varieties,
+    x = unit(midpts, "native"), y=unit(-1, "lines"),
+    just="right", rot=50)
+
+
+my_bar <- barplot(blup_1_final$blups , border=F , names.arg=blup_1_final$varieties , 
+                  las=2 , 
+                  col=c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6) , rgb(0.3,0.9,0.4,0.6) ,  rgb(0.3,0.9,0.4,0.6)) , 
+                  ylim=c(-0.06,0.06) , 
+                  main="" )
+
+# Add abline
+abline(v=14.4 , col="grey")
+ 
+
+```
+### Model 2
+
+Now, filtering for the drought confdition.
+Model 2 takes treatments, blocks and days as fixed effect. Only variety is taken as random effect.
+
+```{r model2, echo=TRUE}
+data2 <- data1%>%filter(treatments==UQ("drought"))
+model2 <- lmer(pheno~ blocks + days + (1|variety), data=data2)
+summary(model2)
+blups_m2 <- ranef(model2)$variety
+
+colnames(blups_m2)<-"blups"
+
+#Taking adjusted means
+adj2 = coef(model2)$variety
+#Formating the data for plotting
+blup2 <- blups_m2%>%mutate("variety" = rownames(blups_m2), "adjMeans"= adj2[,1])
+blup2 <- blup2[with(blup2, order(blups)),]
+
+## Plot, but suppress the labels
+midpts <- barplot(blup2$adjMeans, col=rainbow(20), names.arg="")
+## Use grid to add the labels    
+vps <- baseViewports()
+pushViewport(vps$inner, vps$figure, vps$plot)
+
+grid.text(blup2$variety,
+    x = unit(midpts, "native"), y=unit(-1, "lines"),
+    just="right", rot=50)
+
+
+
+
+```
+
+### Model 3
+Here I'm taking the whole data (all tratments).
+Model 3 takes blocks as fixed effect, then makes autoregressive residual (AR1) for the days (It means the correlation residual due to measurements have been made on the same plant). Then variety is a random effect combined with treatments.
+
+
+```{r model3, echo=TRUE}
+library(sommer)
+# data2 <- data1%>%filter(treatments==UQ("Drought"))
+model3 <- mmer(pheno~blocks, random=~ vs(days, Gu=AR1(days, rho=0.3)) + vs(treatments,variety), rcov=~units, data=data1, verbose = FALSE)
+summary(model3)
+
+
+blups_m3D <- as.data.frame(model3$U$`drought:variety`)
+blups_m3W <- as.data.frame(model3$U$`wattered:variety`)
+blups_m3 <- rbind(blups_m3D,blups_m3W)
+colnames(blups_m3)<-"blups"
+
+#Taking adjusted means
+listMeans <- predict.mmer(model3,classify = c("treatments","variety"))
+adj3 <- listMeans$pvals$predicted.value
+adj3_names <- listMeans$pvals$variety
+
+#preparing column with treatments
+trt_Drought <- c(rep("Drought",12))
+trt_Wattered <- c(rep("Wattered",12))
+trt_names <- append(trt_Drought,trt_Wattered)
+
+#Formating the data for plotting
+blup3 <- blups_m3%>%mutate("variety" = adj3_names, "adjMeans"=adj3, "treatments"=trt_names)
+blup3 <- blup3[with(blup3, order(treatments, adjMeans)),]
+
+
+# Plot, but suppress the labels
+midpts <- barplot(blup3$adjMeans, col=rainbow(20), names.arg="")
+
+# Use grid to add the labels
+vps <- baseViewports()
+pushViewport(vps$inner, vps$figure, vps$plot)
+
+grid.text(blup3$variety,
+    x = unit(midpts, "native"), y=unit(-1, "lines"),
+    just="right", rot=50)
+
+
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
