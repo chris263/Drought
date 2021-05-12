@@ -38,7 +38,7 @@ addToREADME(paste("The random seed is", random_seed))
 
 ## Defining Main Settings and Simulating data
 
-Reading and simulating data. 2 Locations, 14 varieties, 3 rep, 2 treatments, 3 times (days).
+Reading and simulating data. 2 Locations, 12 varieties, 3 rep, 2 treatments, 3 times (days).
 
 
 
@@ -58,7 +58,7 @@ hist(data1$pheno)
 
 ```
 
-## Modeling with 4 different interactions
+## Modeling with 3 different interactions
 
 ### Model 1
 
@@ -108,6 +108,8 @@ abline(v=14.4 , col="grey")
  
 
 ```
+
+
 ### Model 2
 
 Now, filtering for the drought confdition.

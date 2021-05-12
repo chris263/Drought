@@ -425,7 +425,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-05-11
+<strong>Last updated:</strong> 2021-05-12
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -449,7 +449,7 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 </div>
 <div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -516,16 +516,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomchris263Droughttree31095d39fd80b090d142689e8b8d314e5ad63b4ctargetblank31095d3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/chris263/Drought/tree/31095d39fd80b090d142689e8b8d314e5ad63b4c" target="_blank">31095d3</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomchris263Droughttree7e34c23fd8ee740198b3a67518f859386df4797etargetblank7e34c23a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/chris263/Drought/tree/7e34c23fd8ee740198b3a67518f859386df4797e" target="_blank">7e34c23</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomchris263Droughttree31095d39fd80b090d142689e8b8d314e5ad63b4ctargetblank31095d3a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomchris263Droughttree7e34c23fd8ee740198b3a67518f859386df4797etargetblank7e34c23a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/chris263/Drought/tree/31095d39fd80b090d142689e8b8d314e5ad63b4c" target="_blank">31095d3</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/chris263/Drought/tree/7e34c23fd8ee740198b3a67518f859386df4797e" target="_blank">7e34c23</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -537,10 +537,8 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
-Untracked files:
-    Untracked:  analysis/droughtAnalysis.Rmd
-    Untracked:  code/addToREADME.R
-    Untracked:  code/simulateData.R
+Unstaged changes:
+    Modified:   analysis/droughtAnalysis.Rmd
 
 </code></pre>
 <p>
@@ -553,9 +551,69 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/droughtAnalysis.Rmd</code>) and HTML (<code>docs/droughtAnalysis.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/chris263/Drought/blob/7e34c23fd8ee740198b3a67518f859386df4797e/analysis/droughtAnalysis.Rmd" target="_blank">7e34c23</a>
+</td>
+<td>
+chris263
+</td>
+<td>
+2021-05-11
+</td>
+<td>
+adding project to identify varieties tolerant to drought
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/chris263/Drought/7e34c23fd8ee740198b3a67518f859386df4797e/docs/droughtAnalysis.html" target="_blank">7e34c23</a>
+</td>
+<td>
+chris263
+</td>
+<td>
+2021-05-11
+</td>
+<td>
+adding project to identify varieties tolerant to drought
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -566,7 +624,7 @@ There are no past versions. Publish this analysis with <code>wflow_publish()</co
 </div>
 <div id="defining-main-settings-and-simulating-data" class="section level2">
 <h2>Defining Main Settings and Simulating data</h2>
-<p>Reading and simulating data. 2 Locations, 14 varieties, 3 rep, 2 treatments, 3 times (days).</p>
+<p>Reading and simulating data. 2 Locations, 12 varieties, 3 rep, 2 treatments, 3 times (days).</p>
 <pre><code>
 Attaching package: &#39;dplyr&#39;</code></pre>
 <pre><code>The following objects are masked from &#39;package:stats&#39;:
@@ -576,9 +634,46 @@ Attaching package: &#39;dplyr&#39;</code></pre>
 
     intersect, setdiff, setequal, union</code></pre>
 <p><img src="figure/droughtAnalysis.Rmd/main%20settings-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-main-settings-1">
+Past versions of “main settings-1.png”
+</button>
+</p>
+<div id="fig-no-spaces-main-settings-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/chris263/Drought/blob/7e34c23fd8ee740198b3a67518f859386df4797e/docs/figure/droughtAnalysis.Rmd/main settings-1.png" target="_blank">7e34c23</a>
+</td>
+<td>
+chris263
+</td>
+<td>
+2021-05-11
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="modeling-with-4-different-interactions" class="section level2">
-<h2>Modeling with 4 different interactions</h2>
+</div>
+</div>
+<div id="modeling-with-3-different-interactions" class="section level2">
+<h2>Modeling with 3 different interactions</h2>
 <div id="model-1" class="section level3">
 <h3>Model 1</h3>
 <p>Model 1 takes treatments and varieties as fixed effect. The interaction treatments per variety is taken as random effect.</p>
@@ -678,6 +773,43 @@ grid.text(blup_1_final$varieties,
     x = unit(midpts, &quot;native&quot;), y=unit(-1, &quot;lines&quot;),
     just=&quot;right&quot;, rot=50)</code></pre>
 <p><img src="figure/droughtAnalysis.Rmd/model1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-model1-1">
+Past versions of model1-1.png
+</button>
+</p>
+<div id="fig-model1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/chris263/Drought/blob/7e34c23fd8ee740198b3a67518f859386df4797e/docs/figure/droughtAnalysis.Rmd/model1-1.png" target="_blank">7e34c23</a>
+</td>
+<td>
+chris263
+</td>
+<td>
+2021-05-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>my_bar &lt;- barplot(blup_1_final$blups , border=F , names.arg=blup_1_final$varieties , 
                   las=2 , 
                   col=c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6) , rgb(0.3,0.9,0.4,0.6) ,  rgb(0.3,0.9,0.4,0.6)) , 
@@ -686,7 +818,47 @@ grid.text(blup_1_final$varieties,
 
 # Add abline
 abline(v=14.4 , col=&quot;grey&quot;)</code></pre>
-<p><img src="figure/droughtAnalysis.Rmd/model1-2.png" width="672" style="display: block; margin: auto;" /> ### Model 2</p>
+<p><img src="figure/droughtAnalysis.Rmd/model1-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-model1-2">
+Past versions of model1-2.png
+</button>
+</p>
+<div id="fig-model1-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/chris263/Drought/blob/7e34c23fd8ee740198b3a67518f859386df4797e/docs/figure/droughtAnalysis.Rmd/model1-2.png" target="_blank">7e34c23</a>
+</td>
+<td>
+chris263
+</td>
+<td>
+2021-05-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="model-2" class="section level3">
+<h3>Model 2</h3>
 <p>Now, filtering for the drought confdition. Model 2 takes treatments, blocks and days as fixed effect. Only variety is taken as random effect.</p>
 <pre class="r"><code>data2 &lt;- data1%&gt;%filter(treatments==UQ(&quot;drought&quot;))
 model2 &lt;- lmer(pheno~ blocks + days + (1|variety), data=data2)
@@ -741,6 +913,43 @@ grid.text(blup2$variety,
     x = unit(midpts, &quot;native&quot;), y=unit(-1, &quot;lines&quot;),
     just=&quot;right&quot;, rot=50)</code></pre>
 <p><img src="figure/droughtAnalysis.Rmd/model2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-model2-1">
+Past versions of model2-1.png
+</button>
+</p>
+<div id="fig-model2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/chris263/Drought/blob/7e34c23fd8ee740198b3a67518f859386df4797e/docs/figure/droughtAnalysis.Rmd/model2-1.png" target="_blank">7e34c23</a>
+</td>
+<td>
+chris263
+</td>
+<td>
+2021-05-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="model-3" class="section level3">
 <h3>Model 3</h3>
@@ -792,10 +1001,10 @@ colnames(blups_m3)&lt;-&quot;blups&quot;
 #Taking adjusted means
 listMeans &lt;- predict.mmer(model3,classify = c(&quot;treatments&quot;,&quot;variety&quot;))</code></pre>
 <pre><code>iteration    LogLik     wall    cpu(sec)   restrained
-    1      166.847   21:16:32      0           0
-    2      166.847   21:16:32      0           0
-    3      166.847   21:16:32      0           0
-    4      166.847   21:16:32      0           0</code></pre>
+    1      166.847   11:10:56      0           0
+    2      166.847   11:10:56      0           0
+    3      166.847   11:10:56      0           0
+    4      166.847   11:10:56      0           0</code></pre>
 <pre class="r"><code>adj3 &lt;- listMeans$pvals$predicted.value
 adj3_names &lt;- listMeans$pvals$variety
 
@@ -820,6 +1029,43 @@ grid.text(blup3$variety,
     x = unit(midpts, &quot;native&quot;), y=unit(-1, &quot;lines&quot;),
     just=&quot;right&quot;, rot=50)</code></pre>
 <p><img src="figure/droughtAnalysis.Rmd/model3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-model3-1">
+Past versions of model3-1.png
+</button>
+</p>
+<div id="fig-model3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/chris263/Drought/blob/7e34c23fd8ee740198b3a67518f859386df4797e/docs/figure/droughtAnalysis.Rmd/model3-1.png" target="_blank">7e34c23</a>
+</td>
+<td>
+chris263
+</td>
+<td>
+2021-05-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
 <br>
 <p>
@@ -859,8 +1105,8 @@ loaded via a namespace (and not attached):
 [25] vctrs_0.3.6       hms_0.5.3         rprojroot_2.0.2   tidyselect_1.1.0 
 [29] glue_1.4.2        here_1.0.1        R6_2.5.0          rmarkdown_2.6    
 [33] minqa_1.2.4       readr_1.4.0       purrr_0.3.4       magrittr_2.0.1   
-[37] splines_4.0.3     promises_1.1.1    ellipsis_0.3.1    htmltools_0.5.1.1
-[41] httpuv_1.5.4      stringi_1.5.3    </code></pre>
+[37] whisker_0.4       splines_4.0.3     promises_1.1.1    ellipsis_0.3.1   
+[41] htmltools_0.5.1.1 httpuv_1.5.4      stringi_1.5.3    </code></pre>
 </div>
 </div>
 </div>
