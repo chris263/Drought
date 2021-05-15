@@ -67,6 +67,7 @@ Model 1 takes treatments and varieties as fixed effect. The interaction treatmen
 ```{r model1, echo = TRUE}
 library(tidyr)
 library(lme4)
+library(emmeans)
 library(grid)
 library(gridBase)
 model1 <- lmer(pheno~treatments+variety+(1|variety/treatments), data=data1)
@@ -80,11 +81,14 @@ colnames(blups_m1)<-"blups"
 #Formating the data for plotting
 blup <- blups_m1%>%mutate("tratVar" = rownames(blups_m1))
 df <- data.frame(x = blup$tratVar)
-dfinal <- df %>% separate(x, c("treatments","varieties"), sep = ":")
+dfinal <- df %>% separate(x, c("treatments","variety"), sep = ":")
 blup_1_final <- cbind(blup,dfinal)
 blup_1_final
 
 blup_1_final <- blup_1_final[with(blup_1_final, order(treatments,blups)),]
+
+# Taking adjusted means. The ideal is take the adjusted mean per treatment.
+# adj1 <- summary(lsmeans(model1, "variety"))
 
 # ## Plot, but suppress the labels
 midpts <- barplot(blup_1_final$blups, col=rainbow(20), names.arg="", beside= TRUE)
@@ -152,7 +156,7 @@ Model 3 takes blocks as fixed effect, then makes autoregressive residual (AR1) f
 ```{r model3, echo=TRUE}
 library(sommer)
 # data2 <- data1%>%filter(treatments==UQ("Drought"))
-model3 <- mmer(pheno~blocks, random=~ vs(days, Gu=AR1(days, rho=0.3)) + vs(treatments,variety), rcov=~units, data=data1, verbose = FALSE)
+model3 <- mmer(pheno~blocks, random=~vs(days, Gu=AR1(days, rho=0.3)) + vs(treatments,variety), rcov=~units, data=data1, verbose = FALSE)
 summary(model3)
 
 
@@ -167,8 +171,8 @@ adj3 <- listMeans$pvals$predicted.value
 adj3_names <- listMeans$pvals$variety
 
 #preparing column with treatments
-trt_Drought <- c(rep("Drought",12))
-trt_Wattered <- c(rep("Wattered",12))
+trt_Drought <- c(rep("Drought",length(varieties)))
+trt_Wattered <- c(rep("Wattered",length(varieties)))
 trt_names <- append(trt_Drought,trt_Wattered)
 
 #Formating the data for plotting
@@ -190,5 +194,27 @@ grid.text(blup3$variety,
 
 ```
 
+## Comparing Models
+
+Here I am making a regression with adjusted means between model2 and model3.
+
+```{r regression, echo=TRUE}
+
+# Ordering the data per variety
+blup2 <- blup2[with(blup2, order(variety)),]
+blup3 <- blup3[with(blup3, order(treatments, variety)),]
+
+plt_dataf = data.frame(blup2Means=as.double(blup2$adjMeans),blup3Means=as.double(blup3$adjMeans[1:12]))
+m2m3 <- lm(blup2Means ~ blup3Means, data=plt_dataf)
+summary(m2m3)
+with(plt_dataf,plot(blup3Means, blup2Means))
+abline(m2m3)
+coef_m2m3 <- coefficients(m2m3)
+
+r2 <- var(plt_dataf$blup2Means,plt_dataf$blup3Means)/sqrt(var(plt_dataf$blup2Means)*var(plt_dataf$blup3Means))
+
+cat("The coefficent of regression between models 2 and 3 is", round(r2,4),"\n")
+
+```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
