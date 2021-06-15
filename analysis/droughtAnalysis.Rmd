@@ -44,17 +44,22 @@ Reading and simulating data. 2 Locations, 12 varieties, 3 rep, 2 treatments, 3 t
 
 ```{r main settings, echo = FALSE}
 library(dplyr)
-varieties <- c("A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12")
-blocks <- c(1,2,3)
-treatments <- c("wattered","drought")
-locations <- c("Mafra", "Chapeco")
-days <- c(30,60,90)
+# varieties <- c("A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12")
+# blocks <- c(1,2,3)
+# treatments <- c("wattered","drought")
+# locations <- c("Mafra", "Chapeco")
+# days <- c(30,60,90)
 
-source(here::here("code/simulateData.R"))
+# source(here::here("code/simulateData.R"))
 
-dataf <- simulateData(varieties, blocks,treatments,locations,days)
-data1 <- dataf%>%filter(location==UQ("Mafra"))
-hist(data1$pheno)
+
+
+# dataf <- simulateData(varieties, blocks,treatments,locations,days)
+# data1 <- dataf%>%filter(location==UQ("Mafra"))
+# hist(data1$pheno)
+
+dataf <- read.csv("data/analise_macro_area_foliar_local_1.csv", sep = ",", header = T)
+hist(dataf$avg_area_total)
 
 ```
 
@@ -70,11 +75,15 @@ library(lme4)
 library(emmeans)
 library(grid)
 library(gridBase)
-model1 <- lmer(pheno~treatments+variety+(1|variety/treatments), data=data1)
+
+#creating a column named "centered" for avg_area_total
+# dataf <- dataf%>%mutate("pheno" = scale(dataf$avg_area_total, scale=TRUE))
+
+model1 <- lmer(avg_area_total~irrigacao+(1|irrigacao:cultivar), data=dataf)
 summary(model1)
 
 #getting the random effect
-blups_m1 <- ranef(model1)$treatments
+blups_m1 <- ranef(model1)$irrigacao
 blups_m1 <- data.frame(blups_m1)
 colnames(blups_m1)<-"blups"
 
@@ -85,13 +94,18 @@ dfinal <- df %>% separate(x, c("treatments","variety"), sep = ":")
 blup_1_final <- cbind(blup,dfinal)
 blup_1_final
 
+min1 <- round(min(blup_1_final$blups)-1,1)
+max1 <- round(max(blup_1_final$blups)+1.5,1)
+
 blup_1_final <- blup_1_final[with(blup_1_final, order(treatments,blups)),]
+# View(blup_1_final)
 
 # Taking adjusted means. The ideal is take the adjusted mean per treatment.
 # adj1 <- summary(lsmeans(model1, "variety"))
 
 # ## Plot, but suppress the labels
 midpts <- barplot(blup_1_final$blups, col=rainbow(20), names.arg="", beside= TRUE)
+
 ## Use grid to add the labels
 vps <- baseViewports()
 pushViewport(vps$inner, vps$figure, vps$plot)
@@ -101,14 +115,14 @@ grid.text(blup_1_final$varieties,
     just="right", rot=50)
 
 
-my_bar <- barplot(blup_1_final$blups , border=F , names.arg=blup_1_final$varieties , 
+my_bar <- barplot(blup_1_final$blups , border=F , names.arg=blup_1_final$variety , 
                   las=2 , 
                   col=c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6) , rgb(0.3,0.9,0.4,0.6) ,  rgb(0.3,0.9,0.4,0.6)) , 
-                  ylim=c(-0.06,0.06) , 
+                  ylim=c(min1,max1) , 
                   main="" )
 
 # Add abline
-abline(v=14.4 , col="grey")
+# abline(v=5 , col="grey")
  
 
 ```
@@ -120,15 +134,16 @@ Now, filtering for the drought confdition.
 Model 2 takes treatments, blocks and days as fixed effect. Only variety is taken as random effect.
 
 ```{r model2, echo=TRUE}
-data2 <- data1%>%filter(treatments==UQ("drought"))
-model2 <- lmer(pheno~ blocks + days + (1|variety), data=data2)
+data2 <- dataf%>%filter(irrigacao==UQ("nao_irrigado"))
+model2 <- lmer(avg_area_total~ rep + avaliacao + (1|cultivar), data=data2)
 summary(model2)
-blups_m2 <- ranef(model2)$variety
+blups_m2 <- ranef(model2)$cultivar
+
 
 colnames(blups_m2)<-"blups"
 
 #Taking adjusted means
-adj2 = coef(model2)$variety
+adj2 = coef(model2)$cultivar
 #Formating the data for plotting
 blup2 <- blups_m2%>%mutate("variety" = rownames(blups_m2), "adjMeans"= adj2[,1])
 blup2 <- blup2[with(blup2, order(blups)),]
@@ -156,12 +171,21 @@ Model 3 takes blocks as fixed effect, then makes autoregressive residual (AR1) f
 ```{r model3, echo=TRUE}
 library(sommer)
 # data2 <- data1%>%filter(treatments==UQ("Drought"))
-model3 <- mmer(pheno~blocks, random=~vs(days, Gu=AR1(days, rho=0.3)) + vs(treatments,variety), rcov=~units, data=data1, verbose = FALSE)
+
+data3<-data.frame(variety=as.factor(dataf$cultivar),
+                     # location=as.factor(lColumn),
+                     blocks=as.factor(dataf$rep),
+                     treatments=as.factor(dataf$irrigacao),
+                     days=as.factor(dataf$avaliacao),
+                     daysDouble=as.double(dataf$avaliacao),
+                     pheno=as.double(dataf$avg_area_total))
+
+model3 <- mmer(pheno~blocks, random=~vs(days, Gu=AR1(days, rho=0.3)) + vs(treatments,variety), rcov=~units, data=data3, verbose = FALSE)
 summary(model3)
 
 
-blups_m3D <- as.data.frame(model3$U$`drought:variety`)
-blups_m3W <- as.data.frame(model3$U$`wattered:variety`)
+blups_m3D <- as.data.frame(model3$U$`nao_irrigado:variety`)
+blups_m3W <- as.data.frame(model3$U$`irrigado:variety`)
 blups_m3 <- rbind(blups_m3D,blups_m3W)
 colnames(blups_m3)<-"blups"
 
@@ -171,8 +195,9 @@ adj3 <- listMeans$pvals$predicted.value
 adj3_names <- listMeans$pvals$variety
 
 #preparing column with treatments
-trt_Drought <- c(rep("Drought",length(varieties)))
-trt_Wattered <- c(rep("Wattered",length(varieties)))
+varieties <- unique(dataf$cultivar)
+trt_Drought <- c(rep("nao_irrigado",length(varieties)))
+trt_Wattered <- c(rep("irrigado",length(varieties)))
 trt_names <- append(trt_Drought,trt_Wattered)
 
 #Formating the data for plotting
@@ -204,11 +229,11 @@ Here I am making a regression with adjusted means between model2 and model3.
 blup2 <- blup2[with(blup2, order(variety)),]
 blup3 <- blup3[with(blup3, order(treatments, variety)),]
 
-plt_dataf = data.frame(blup2Means=as.double(blup2$adjMeans),blup3Means=as.double(blup3$adjMeans[1:12]))
+plt_dataf = data.frame(blup2Means=as.double(blup2$adjMeans),blup3Means=as.double(blup3$adjMeans[1:length(varieties)]))
 m2m3 <- lm(blup2Means ~ blup3Means, data=plt_dataf)
 summary(m2m3)
 with(plt_dataf,plot(blup3Means, blup2Means))
-abline(m2m3)
+# abline(m2m3)
 coef_m2m3 <- coefficients(m2m3)
 
 r2 <- var(plt_dataf$blup2Means,plt_dataf$blup3Means)/sqrt(var(plt_dataf$blup2Means)*var(plt_dataf$blup3Means))

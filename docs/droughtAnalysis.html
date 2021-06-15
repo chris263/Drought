@@ -425,7 +425,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-05-15
+<strong>Last updated:</strong> 2021-06-15
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -516,16 +516,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomchris263Droughttree90f85d8872f1ddfde2bc1416e5a6d848df771a11targetblank90f85d8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/chris263/Drought/tree/90f85d8872f1ddfde2bc1416e5a6d848df771a11" target="_blank">90f85d8</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomchris263Droughttreec9f26389c9b807f452f9d4d88c55049cf2cb1acdtargetblankc9f2638a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/chris263/Drought/tree/c9f26389c9b807f452f9d4d88c55049cf2cb1acd" target="_blank">c9f2638</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomchris263Droughttree90f85d8872f1ddfde2bc1416e5a6d848df771a11targetblank90f85d8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomchris263Droughttreec9f26389c9b807f452f9d4d88c55049cf2cb1acdtargetblankc9f2638a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/chris263/Drought/tree/90f85d8872f1ddfde2bc1416e5a6d848df771a11" target="_blank">90f85d8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/chris263/Drought/tree/c9f26389c9b807f452f9d4d88c55049cf2cb1acd" target="_blank">c9f2638</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -536,6 +536,9 @@ Ignored files:
     Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  data/analise_macro_area_foliar_local_1.csv
 
 Unstaged changes:
     Modified:   analysis/droughtAnalysis.Rmd
@@ -577,6 +580,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/chris263/Drought/blob/c9f26389c9b807f452f9d4d88c55049cf2cb1acd/analysis/droughtAnalysis.Rmd" target="_blank">c9f2638</a>
+</td>
+<td>
+chris263
+</td>
+<td>
+2021-05-15
+</td>
+<td>
+adding model comparison and coefficeint of regression
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/chris263/Drought/c9f26389c9b807f452f9d4d88c55049cf2cb1acd/docs/droughtAnalysis.html" target="_blank">c9f2638</a>
+</td>
+<td>
+chris263
+</td>
+<td>
+2021-05-15
+</td>
+<td>
+adding model comparison and coefficeint of regression
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -722,46 +759,38 @@ Attaching package: &#39;Matrix&#39;</code></pre>
 <pre class="r"><code>library(emmeans)
 library(grid)
 library(gridBase)
-model1 &lt;- lmer(pheno~treatments+variety+(1|variety/treatments), data=data1)
+
+#creating a column named &quot;centered&quot; for avg_area_total
+# dataf &lt;- dataf%&gt;%mutate(&quot;pheno&quot; = scale(dataf$avg_area_total, scale=TRUE))
+
+model1 &lt;- lmer(avg_area_total~irrigacao+(1|irrigacao:cultivar), data=dataf)
 summary(model1)</code></pre>
 <pre><code>Linear mixed model fit by REML [&#39;lmerMod&#39;]
-Formula: pheno ~ treatments + variety + (1 | variety/treatments)
-   Data: data1
+Formula: avg_area_total ~ irrigacao + (1 | irrigacao:cultivar)
+   Data: dataf
 
-REML criterion at convergence: 1313.1
+REML criterion at convergence: 6775.2
 
 Scaled residuals: 
-     Min       1Q   Median       3Q      Max 
--2.84550 -0.58595  0.09384  0.60334  2.48780 
+    Min      1Q  Median      3Q     Max 
+-2.1557 -0.4643  0.1531  0.6789  2.3785 
 
 Random effects:
  Groups             Name        Variance Std.Dev.
- treatments:variety (Intercept)  0.09103 0.3017  
- variety            (Intercept) 21.82121 4.6713  
- Residual                       31.14729 5.5810  
-Number of obs: 216, groups:  treatments:variety, 24; variety, 12
+ irrigacao:cultivar (Intercept)    559.9  23.66  
+ Residual                       624200.2 790.06  
+Number of obs: 420, groups:  irrigacao:cultivar, 28
 
 Fixed effects:
-                     Estimate Std. Error t value
-(Intercept)         9.948e+01  4.873e+00  20.415
-treatmentswattered -4.143e+00  7.694e-01  -5.385
-varietyA10          1.578e+01  6.870e+00   2.297
-varietyA11          4.666e+01  6.870e+00   6.792
-varietyA12          6.553e+01  6.870e+00   9.539
-varietyA2          -4.749e-12  6.870e+00   0.000
-varietyA3           1.578e+01  6.870e+00   2.297
-varietyA4           4.666e+01  6.870e+00   6.792
-varietyA5           6.553e+01  6.870e+00   9.539
-varietyA6          -4.743e-12  6.870e+00   0.000
-varietyA7           1.578e+01  6.870e+00   2.297
-varietyA8           4.666e+01  6.870e+00   6.792
-varietyA9           6.553e+01  6.870e+00   9.539</code></pre>
-<pre><code>
-Correlation matrix not shown by default, as p = 13 &gt; 12.
-Use print(x, correlation=TRUE)  or
-    vcov(x)        if you need it</code></pre>
+                      Estimate Std. Error t value
+(Intercept)            1825.19      54.89  33.255
+irrigacaonao_irrigado  -490.37      77.62  -6.318
+
+Correlation of Fixed Effects:
+            (Intr)
+irrgcn_rrgd -0.707</code></pre>
 <pre class="r"><code>#getting the random effect
-blups_m1 &lt;- ranef(model1)$treatments
+blups_m1 &lt;- ranef(model1)$irrigacao
 blups_m1 &lt;- data.frame(blups_m1)
 colnames(blups_m1)&lt;-&quot;blups&quot;
 
@@ -771,38 +800,47 @@ df &lt;- data.frame(x = blup$tratVar)
 dfinal &lt;- df %&gt;% separate(x, c(&quot;treatments&quot;,&quot;variety&quot;), sep = &quot;:&quot;)
 blup_1_final &lt;- cbind(blup,dfinal)
 blup_1_final</code></pre>
-<pre><code>          blups      tratVar treatments variety
-1   0.016000412   drought:A1    drought      A1
-2  -0.055261726  drought:A10    drought     A10
-3   0.009715734  drought:A11    drought     A11
-4   0.029545580  drought:A12    drought     A12
-5   0.016000412   drought:A2    drought      A2
-6  -0.055261726   drought:A3    drought      A3
-7   0.009715734   drought:A4    drought      A4
-8   0.029545580   drought:A5    drought      A5
-9   0.016000412   drought:A6    drought      A6
-10 -0.055261726   drought:A7    drought      A7
-11  0.009715734   drought:A8    drought      A8
-12  0.029545580   drought:A9    drought      A9
-13 -0.016000412  wattered:A1   wattered      A1
-14  0.055261726 wattered:A10   wattered     A10
-15 -0.009715734 wattered:A11   wattered     A11
-16 -0.029545580 wattered:A12   wattered     A12
-17 -0.016000412  wattered:A2   wattered      A2
-18  0.055261726  wattered:A3   wattered      A3
-19 -0.009715734  wattered:A4   wattered      A4
-20 -0.029545580  wattered:A5   wattered      A5
-21 -0.016000412  wattered:A6   wattered      A6
-22  0.055261726  wattered:A7   wattered      A7
-23 -0.009715734  wattered:A8   wattered      A8
-24 -0.029545580  wattered:A9   wattered      A9</code></pre>
-<pre class="r"><code>blup_1_final &lt;- blup_1_final[with(blup_1_final, order(treatments,blups)),]
+<pre><code>         blups               tratVar   treatments  variety
+1  -2.89504478       irrigado:BAG 06     irrigado   BAG 06
+2  -3.55366593      irrigado:CSC 416     irrigado  CSC 416
+3  -4.87480348     irrigado:CSC 4302     irrigado CSC 4302
+4   1.45014579     irrigado:CSC 4303     irrigado CSC 4303
+5   3.36827758     irrigado:CSC 4304     irrigado CSC 4304
+6  -2.03397239      irrigado:CSC 439     irrigado  CSC 439
+7   1.25096277      irrigado:CSC 444     irrigado  CSC 444
+8  -3.83286912      irrigado:CSC 447     irrigado  CSC 447
+9   4.28820839     irrigado:CSC 4501     irrigado CSC 4501
+10  0.33441228      irrigado:CSC 467     irrigado  CSC 467
+11  4.22751824     irrigado:CSC 4703     irrigado CSC 4703
+12  2.47357099     irrigado:CSC 4704     irrigado CSC 4704
+13  2.14601898     irrigado:CSC 4707     irrigado CSC 4707
+14 -2.34875932      irrigado:CSC 497     irrigado  CSC 497
+15 -2.55231292   nao_irrigado:BAG 06 nao_irrigado   BAG 06
+16 -0.35346353  nao_irrigado:CSC 416 nao_irrigado  CSC 416
+17 -2.74647389 nao_irrigado:CSC 4302 nao_irrigado CSC 4302
+18 -1.68058460 nao_irrigado:CSC 4303 nao_irrigado CSC 4303
+19  0.01606424 nao_irrigado:CSC 4304 nao_irrigado CSC 4304
+20  0.79903179  nao_irrigado:CSC 439 nao_irrigado  CSC 439
+21 -0.47232616  nao_irrigado:CSC 444 nao_irrigado  CSC 444
+22 -0.23731429  nao_irrigado:CSC 447 nao_irrigado  CSC 447
+23  1.80990283 nao_irrigado:CSC 4501 nao_irrigado CSC 4501
+24  0.40693617  nao_irrigado:CSC 467 nao_irrigado  CSC 467
+25  3.09002988 nao_irrigado:CSC 4703 nao_irrigado CSC 4703
+26  3.05868153 nao_irrigado:CSC 4704 nao_irrigado CSC 4704
+27  2.68319875 nao_irrigado:CSC 4707 nao_irrigado CSC 4707
+28 -3.82136981  nao_irrigado:CSC 497 nao_irrigado  CSC 497</code></pre>
+<pre class="r"><code>min1 &lt;- round(min(blup_1_final$blups)-1,1)
+max1 &lt;- round(max(blup_1_final$blups)+1.5,1)
+
+blup_1_final &lt;- blup_1_final[with(blup_1_final, order(treatments,blups)),]
+# View(blup_1_final)
 
 # Taking adjusted means. The ideal is take the adjusted mean per treatment.
 # adj1 &lt;- summary(lsmeans(model1, &quot;variety&quot;))
 
 # ## Plot, but suppress the labels
 midpts &lt;- barplot(blup_1_final$blups, col=rainbow(20), names.arg=&quot;&quot;, beside= TRUE)
+
 ## Use grid to add the labels
 vps &lt;- baseViewports()
 pushViewport(vps$inner, vps$figure, vps$plot)
@@ -835,6 +873,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/chris263/Drought/blob/c9f26389c9b807f452f9d4d88c55049cf2cb1acd/docs/figure/droughtAnalysis.Rmd/model1-1.png" target="_blank">c9f2638</a>
+</td>
+<td>
+chris263
+</td>
+<td>
+2021-05-15
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/chris263/Drought/blob/7e34c23fd8ee740198b3a67518f859386df4797e/docs/figure/droughtAnalysis.Rmd/model1-1.png" target="_blank">7e34c23</a>
 </td>
 <td>
@@ -848,14 +897,11 @@ chris263
 </table>
 </div>
 </div>
-<pre class="r"><code>my_bar &lt;- barplot(blup_1_final$blups , border=F , names.arg=blup_1_final$varieties , 
+<pre class="r"><code>my_bar &lt;- barplot(blup_1_final$blups , border=F , names.arg=blup_1_final$variety , 
                   las=2 , 
                   col=c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6) , rgb(0.3,0.9,0.4,0.6) ,  rgb(0.3,0.9,0.4,0.6)) , 
-                  ylim=c(-0.06,0.06) , 
-                  main=&quot;&quot; )
-
-# Add abline
-abline(v=14.4 , col=&quot;grey&quot;)</code></pre>
+                  ylim=c(min1,max1) , 
+                  main=&quot;&quot; )</code></pre>
 <p><img src="figure/droughtAnalysis.Rmd/model1-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-model1-2">
@@ -881,6 +927,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/chris263/Drought/blob/c9f26389c9b807f452f9d4d88c55049cf2cb1acd/docs/figure/droughtAnalysis.Rmd/model1-2.png" target="_blank">c9f2638</a>
+</td>
+<td>
+chris263
+</td>
+<td>
+2021-05-15
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/chris263/Drought/blob/7e34c23fd8ee740198b3a67518f859386df4797e/docs/figure/droughtAnalysis.Rmd/model1-2.png" target="_blank">7e34c23</a>
 </td>
 <td>
@@ -894,49 +951,48 @@ chris263
 </table>
 </div>
 </div>
+<pre class="r"><code># Add abline
+# abline(v=5 , col=&quot;grey&quot;)</code></pre>
 </div>
 <div id="model-2" class="section level3">
 <h3>Model 2</h3>
 <p>Now, filtering for the drought confdition. Model 2 takes treatments, blocks and days as fixed effect. Only variety is taken as random effect.</p>
-<pre class="r"><code>data2 &lt;- data1%&gt;%filter(treatments==UQ(&quot;drought&quot;))
-model2 &lt;- lmer(pheno~ blocks + days + (1|variety), data=data2)
+<pre class="r"><code>data2 &lt;- dataf%&gt;%filter(irrigacao==UQ(&quot;nao_irrigado&quot;))
+model2 &lt;- lmer(avg_area_total~ rep + avaliacao + (1|cultivar), data=data2)
 summary(model2)</code></pre>
 <pre><code>Linear mixed model fit by REML [&#39;lmerMod&#39;]
-Formula: pheno ~ blocks + days + (1 | variety)
+Formula: avg_area_total ~ rep + avaliacao + (1 | cultivar)
    Data: data2
 
-REML criterion at convergence: 719.4
+REML criterion at convergence: 2978.8
 
 Scaled residuals: 
-    Min      1Q  Median      3Q     Max 
--1.6977 -0.4418  0.1645  0.5391  2.1141 
+     Min       1Q   Median       3Q      Max 
+-2.85628 -0.70443  0.08968  0.75923  2.29565 
 
 Random effects:
  Groups   Name        Variance Std.Dev.
- variety  (Intercept) 746.99   27.331  
- Residual              30.12    5.488  
-Number of obs: 108, groups:  variety, 12
+ cultivar (Intercept) 21265    145.8   
+ Residual             87307    295.5   
+Number of obs: 210, groups:  cultivar, 14
 
 Fixed effects:
             Estimate Std. Error t value
-(Intercept) 130.5193     7.9777  16.361
-blocks2       5.0246     1.2935   3.884
-blocks3       1.3588     1.2935   1.050
-days60       -0.7684     1.2935  -0.594
-days90       -2.7590     1.2935  -2.133
+(Intercept)  198.676     79.373   2.503
+rep           -3.951     24.972  -0.158
+avaliacao    381.348     14.418  26.450
 
 Correlation of Fixed Effects:
-        (Intr) blcks2 blcks3 days60
-blocks2 -0.081                     
-blocks3 -0.081  0.500              
-days60  -0.081  0.000  0.000       
-days90  -0.081  0.000  0.000  0.500</code></pre>
-<pre class="r"><code>blups_m2 &lt;- ranef(model2)$variety
+          (Intr) rep   
+rep       -0.629       
+avaliacao -0.545  0.000</code></pre>
+<pre class="r"><code>blups_m2 &lt;- ranef(model2)$cultivar
+
 
 colnames(blups_m2)&lt;-&quot;blups&quot;
 
 #Taking adjusted means
-adj2 = coef(model2)$variety
+adj2 = coef(model2)$cultivar
 #Formating the data for plotting
 blup2 &lt;- blups_m2%&gt;%mutate(&quot;variety&quot; = rownames(blups_m2), &quot;adjMeans&quot;= adj2[,1])
 blup2 &lt;- blup2[with(blup2, order(blups)),]
@@ -1002,53 +1058,63 @@ Attaching package: &#39;MASS&#39;</code></pre>
 <pre><code>Loading required package: lattice</code></pre>
 <pre><code>Loading required package: crayon</code></pre>
 <pre class="r"><code># data2 &lt;- data1%&gt;%filter(treatments==UQ(&quot;Drought&quot;))
-model3 &lt;- mmer(pheno~blocks, random=~vs(days, Gu=AR1(days, rho=0.3)) + vs(treatments,variety), rcov=~units, data=data1, verbose = FALSE)
+
+data3&lt;-data.frame(variety=as.factor(dataf$cultivar),
+                     # location=as.factor(lColumn),
+                     blocks=as.factor(dataf$rep),
+                     treatments=as.factor(dataf$irrigacao),
+                     days=as.factor(dataf$avaliacao),
+                     daysDouble=as.double(dataf$avaliacao),
+                     pheno=as.double(dataf$avg_area_total))
+
+model3 &lt;- mmer(pheno~blocks, random=~vs(days, Gu=AR1(days, rho=0.3)) + vs(treatments,variety), rcov=~units, data=data3, verbose = FALSE)
 summary(model3)</code></pre>
-<pre><code>==============================================================
-          Multivariate Linear Mixed Model fit by REML          
-***********************  sommer 4.1  *********************** 
-==============================================================
+<pre><code>==================================================================
+            Multivariate Linear Mixed Model fit by REML            
+*************************  sommer 4.1  ************************* 
+==================================================================
         logLik       AIC       BIC Method Converge
-Value 166.8472 -327.6943 -317.5685     NR     TRUE
-==============================================================
+Value 167.6875 -329.3749 -317.2542     NR     TRUE
+==================================================================
 Variance-Covariance components:
-                             VarComp VarCompSE Zratio Constraint
-u:days.pheno-pheno             1.668     2.213  0.754   Positive
-drought:variety.pheno-pheno  717.922   303.756  2.363   Positive
-wattered:variety.pheno-pheno 657.969   279.042  2.358   Positive
-units.pheno-pheno             29.486     3.041  9.695   Positive
-==============================================================
+                                 VarComp VarCompSE Zratio Constraint
+u:days.pheno-pheno                577656    409429  1.411   Positive
+irrigado:variety.pheno-pheno      240062     93474  2.568   Positive
+nao_irrigado:variety.pheno-pheno   23964     11761  2.038   Positive
+units.pheno-pheno                  89171      6419 13.892   Positive
+==================================================================
 Fixed effects:
   Trait      Effect Estimate Std.Error t.value
-1 pheno (Intercept)  128.078     5.461  23.452
-2 pheno     blocks2    1.985     0.905   2.194
-3 pheno     blocks3    1.847     0.905   2.041
-==============================================================
+1 pheno (Intercept)  1416.37    430.69   3.289
+2 pheno     blocks2  -123.04     35.69  -3.447
+3 pheno     blocks3   -97.55     35.69  -2.733
+==================================================================
 Groups and observations:
-                 pheno
-u:days               3
-drought:variety     12
-wattered:variety    12
-==============================================================
+                     pheno
+u:days                   5
+irrigado:variety        14
+nao_irrigado:variety    14
+==================================================================
 Use the &#39;$&#39; sign to access results and parameters</code></pre>
-<pre class="r"><code>blups_m3D &lt;- as.data.frame(model3$U$`drought:variety`)
-blups_m3W &lt;- as.data.frame(model3$U$`wattered:variety`)
+<pre class="r"><code>blups_m3D &lt;- as.data.frame(model3$U$`nao_irrigado:variety`)
+blups_m3W &lt;- as.data.frame(model3$U$`irrigado:variety`)
 blups_m3 &lt;- rbind(blups_m3D,blups_m3W)
 colnames(blups_m3)&lt;-&quot;blups&quot;
 
 #Taking adjusted means
 listMeans &lt;- predict.mmer(model3,classify = c(&quot;treatments&quot;,&quot;variety&quot;))</code></pre>
 <pre><code>iteration    LogLik     wall    cpu(sec)   restrained
-    1      166.847   18:47:46      0           0
-    2      166.847   18:47:46      0           0
-    3      166.847   18:47:46      0           0
-    4      166.847   18:47:46      0           0</code></pre>
+    1      167.688   16:13:9      0           0
+    2      167.688   16:13:9      0           0
+    3      167.688   16:13:10      1           0
+    4      167.688   16:13:10      1           0</code></pre>
 <pre class="r"><code>adj3 &lt;- listMeans$pvals$predicted.value
 adj3_names &lt;- listMeans$pvals$variety
 
 #preparing column with treatments
-trt_Drought &lt;- c(rep(&quot;Drought&quot;,length(varieties)))
-trt_Wattered &lt;- c(rep(&quot;Wattered&quot;,length(varieties)))
+varieties &lt;- unique(dataf$cultivar)
+trt_Drought &lt;- c(rep(&quot;nao_irrigado&quot;,length(varieties)))
+trt_Wattered &lt;- c(rep(&quot;irrigado&quot;,length(varieties)))
 trt_names &lt;- append(trt_Drought,trt_Wattered)
 
 #Formating the data for plotting
@@ -1113,7 +1179,7 @@ chris263
 blup2 &lt;- blup2[with(blup2, order(variety)),]
 blup3 &lt;- blup3[with(blup3, order(treatments, variety)),]
 
-plt_dataf = data.frame(blup2Means=as.double(blup2$adjMeans),blup3Means=as.double(blup3$adjMeans[1:12]))
+plt_dataf = data.frame(blup2Means=as.double(blup2$adjMeans),blup3Means=as.double(blup3$adjMeans[1:length(varieties)]))
 m2m3 &lt;- lm(blup2Means ~ blup3Means, data=plt_dataf)
 summary(m2m3)</code></pre>
 <pre><code>
@@ -1122,27 +1188,64 @@ lm(formula = blup2Means ~ blup3Means, data = plt_dataf)
 
 Residuals:
        Min         1Q     Median         3Q        Max 
--2.217e-12 -4.906e-13  2.458e-13  7.196e-13  2.046e-12 
+-5.832e-13 -2.569e-13  9.636e-14  2.173e-13  3.849e-13 
 
 Coefficients:
               Estimate Std. Error    t value Pr(&gt;|t|)    
-(Intercept) -9.989e-01  1.818e-12 -5.493e+11   &lt;2e-16 ***
-blup3Means   1.000e+00  1.356e-14  7.374e+13   &lt;2e-16 ***
+(Intercept) -1.076e+03  9.216e-13 -1.167e+15   &lt;2e-16 ***
+blup3Means   9.802e-01  7.055e-16  1.389e+15   &lt;2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 1.227e-12 on 10 degrees of freedom
+Residual standard error: 3.353e-13 on 12 degrees of freedom
 Multiple R-squared:      1, Adjusted R-squared:      1 
-F-statistic: 5.437e+27 on 1 and 10 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre class="r"><code>with(plt_dataf,plot(blup3Means, blup2Means))
-abline(m2m3)</code></pre>
+F-statistic: 1.931e+30 on 1 and 12 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>with(plt_dataf,plot(blup3Means, blup2Means))</code></pre>
 <p><img src="figure/droughtAnalysis.Rmd/regression-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>coef_m2m3 &lt;- coefficients(m2m3)
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-regression-1">
+Past versions of regression-1.png
+</button>
+</p>
+<div id="fig-regression-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/chris263/Drought/blob/c9f26389c9b807f452f9d4d88c55049cf2cb1acd/docs/figure/droughtAnalysis.Rmd/regression-1.png" target="_blank">c9f2638</a>
+</td>
+<td>
+chris263
+</td>
+<td>
+2021-05-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code># abline(m2m3)
+coef_m2m3 &lt;- coefficients(m2m3)
 
 r2 &lt;- var(plt_dataf$blup2Means,plt_dataf$blup3Means)/sqrt(var(plt_dataf$blup2Means)*var(plt_dataf$blup3Means))
 
-cat(&quot;The coefficent of regression between models 2 and 3 are &quot;, round(r2,4),&quot;\n&quot;)</code></pre>
-<pre><code>The coefficent of regression between models 2 and 3 are  1 </code></pre>
+cat(&quot;The coefficent of regression between models 2 and 3 is&quot;, round(r2,4),&quot;\n&quot;)</code></pre>
+<pre><code>The coefficent of regression between models 2 and 3 is 1 </code></pre>
 <p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
 <br>
 <p>
